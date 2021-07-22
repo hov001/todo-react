@@ -1,10 +1,12 @@
 import React from 'react'
 import './App.css'
 
+import Todo from './pages/Todo/Todo'
+
 function App() {
     return (
         <div className="App">
-            <h1>Working!</h1>
+            <Todo />
         </div>
     )
 }
