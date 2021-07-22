@@ -1,7 +1,9 @@
 import React from 'react'
 import './Todo.css'
 // Material ui
+import { makeStyles } from '@material-ui/core/styles'
 import { Box, Button, Input, List, ListItem } from '@material-ui/core'
+import { Close } from '@material-ui/icons'
 // Id generator
 import { v4 as uuidv4 } from 'uuid'
 import classNames from 'classnames'
@@ -39,6 +41,12 @@ class Todo extends React.Component {
     }
   }
 
+  handleDeleteItem = (deletedId) => {
+    this.setState(({ todos }) => ({
+      todos: todos.filter((todo) => todo.id !== deletedId),
+    }))
+  }
+
   handleCompleted = (completedId) => {
     this.setState(({ todos }) => ({
       todos: todos.map((todo) =>
@@ -53,7 +61,7 @@ class Todo extends React.Component {
 
   render() {
     const { draft, todos } = this.state
-    console.log(this.state)
+
     return (
       <div>
         <Box color="text.primary" my="20px">
@@ -83,6 +91,7 @@ class Todo extends React.Component {
                 <span className={classNames({ 'completed-item': completed })}>
                   {value}
                 </span>
+                <Close onClick={() => this.handleDeleteItem(id)} />
               </ListItem>
             ))}
           </List>
