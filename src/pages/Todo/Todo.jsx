@@ -1,8 +1,10 @@
 import React from 'react'
+import './Todo.css'
 // Material ui
 import { Box, Button, Input, List, ListItem } from '@material-ui/core'
 // Id generator
 import { v4 as uuidv4 } from 'uuid'
+import classNames from 'classnames'
 
 class Todo extends React.Component {
   constructor(props) {
@@ -27,11 +29,22 @@ class Todo extends React.Component {
         if (draft.value !== '') {
           return {
             draft: { value: '' },
-            todos: [{ id: uuidv4(), value: draft.value }, ...todos],
+            todos: [
+              { id: uuidv4(), value: draft.value, completed: false },
+              ...todos,
+            ],
           }
         }
       })
     }
+  }
+
+  handleCompleted = (completedId) => {
+    this.setState(({ todos }) => ({
+      todos: todos.map((todo) =>
+        todo.id === completedId ? { ...todo, completed: !todo.completed } : todo
+      ),
+    }))
   }
 
   componentWillUnmount() {
@@ -61,9 +74,15 @@ class Todo extends React.Component {
         </Box>
         <Box color="info.main" width={1 / 4} my="10px" mx="auto">
           <List component="nav" aria-label="main mailbox folders">
-            {todos.map((item) => (
-              <ListItem button key={item.id}>
-                {item.value}
+            {todos.map(({ id, value, completed }) => (
+              <ListItem
+                button
+                key={id}
+                onDoubleClick={() => this.handleCompleted(id)}
+              >
+                <span className={classNames({ 'completed-item': completed })}>
+                  {value}
+                </span>
               </ListItem>
             ))}
           </List>
